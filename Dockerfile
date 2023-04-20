@@ -8,4 +8,4 @@ COPY docker/tarantool/entrypoint.sh .
 
 RUN chmod +x entrypoint.sh
 
-CMD ["/bin/shopt/tarantool/entrypoint.sh"]
+ENTRYPOINT ["/bin/sh", "/opt/tarantool/entrypoint.sh"]
