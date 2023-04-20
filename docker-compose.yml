@@ -1,0 +1,32 @@
+version: "3.8"
+
+volumes:
+  pgdata:
+    driver: local
+  tarantool_data:
+    driver: local
+
+services:
+  postgis:
+    image: openmaptiles/postgis
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=openmaptiles
+      - POSTGRES_USER=db_user
+      - POSTGRES_PASSWORD=db_pass
+  tarantool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgis
+    ports:
+      - "8080:8080"
+      - "3301:3301"
+    volumes:
+      - tarantool_data:/var/lib/tarantool
+    environment:
+      - DATABASE_URL=postgres://db_user:db_pass@postgis/openmaptiles
